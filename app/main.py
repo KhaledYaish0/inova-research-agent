@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from app.schemas import QueryRequest, QueryResponse
-from app.llm import ask_llm
+from app.agent.graph import agent_graph
 
 app = FastAPI(title="Inova Research Agent API")
 
@@ -21,7 +21,15 @@ def query(request: QueryRequest):
         raise HTTPException(status_code=400, detail="Input text cannot be empty.")
 
     try:
-        answer = ask_llm(request.text)
-        return QueryResponse(response=answer)
+        result = agent_graph.invoke(
+            {
+                "question": request.text,
+                "route": None,
+                "search_results": None,
+                "response": None,
+            }
+        )
+
+        return QueryResponse(response=result["response"])
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
