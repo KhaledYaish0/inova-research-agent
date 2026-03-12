@@ -80,8 +80,6 @@ def build_thread_messages(thread_id: str, latest_user_text: str):
     return messages
 
 
-from app.database import get_database_url
-
 @app.post("/query", response_model=QueryResponse)
 def query(request: QueryRequest):
     if not request.text.strip():
