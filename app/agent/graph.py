@@ -1,14 +1,12 @@
-from langgraph.graph import StateGraph, START, END
-from langgraph.checkpoint.memory import MemorySaver
-from app.agent.state import AgentState
-from app.agent.nodes import (
-    router_node,
-    general_node,
-    search_node,
-    answer_with_search_node,
-)
+from langgraph.graph import END, START, StateGraph
 
-memory = MemorySaver()
+from app.agent.nodes import (
+    answer_with_search_node,
+    general_node,
+    router_node,
+    search_node,
+)
+from app.agent.state import AgentState
 
 
 def route_decision(state: AgentState) -> str:
@@ -38,7 +36,7 @@ def build_graph():
     graph.add_edge("search", "answer_with_search")
     graph.add_edge("answer_with_search", END)
 
-    return graph.compile(checkpointer=memory)
+    return graph.compile()
 
 
 agent_graph = build_graph()
